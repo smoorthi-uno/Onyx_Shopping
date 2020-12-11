@@ -1,0 +1,40 @@
+@charset "utf-8";
+body {
+    margin-top:0px;
+    background-size:cover;
+    background-repeat: no-repeat;
+}
+
+.head2
+{
+width:670px;
+background-color:transparent;
+height:100px;
+padding-top: 32px;
+padding-left:8px;
+font-size: 35px;
+}
+
+.col-full
+{
+width:1000px;
+background-color:transparent;
+height:100px;
+margin-left:auto;
+margin-right:auto;
+font-size: 20px;
+}
+
+.section1
+{
+background-color: #74cfbf;
+}
+
+.aboutus
+{
+width:700px;
+height:100px;
+padding-left:431px;
+margin-right:auto;
+font-size: 10px;
+}

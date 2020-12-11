@@ -1,0 +1,33 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+    <section class="header_text sub">
+        <img class="pageBanner" src="{% static 'images/pageBanner.png' %}">
+        <div class="section2">
+            <h4><span>Contact Us</span></h4>
+        </div>
+    </section>
+    <section class="main-content">
+        <div class="row">
+            <div class="span7">
+                <div class="section-title">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{message.tags}}" role="alert">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="maintext">
+                    <p style="font-size: 18px"> We'd love to hear from you! Send us a question with the form below and we will be in touch with you as soon as possible.</p>
+                </div>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="SEND FORM">
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock content %}
