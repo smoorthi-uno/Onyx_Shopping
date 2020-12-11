@@ -1,5 +1,1 @@
-# F20_3900_850_Group3
-#Swetha Moorthi
-#Vahini Madipalli
-#Kavya RaviPrakash
-#Hannah Widger
+E-commerce Clothes shopping website developed for ISQA-3900.
