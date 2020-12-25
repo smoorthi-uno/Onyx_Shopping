@@ -10,6 +10,17 @@
 {% block sidebar %} {% include 'store/sidebar.html' %} {% endblock %}
 
 {% block content %}
+    <!-- BREADCRUMB -->
+    <div id="breadcrumb">
+        <div class="container">
+            <ul class="breadcrumb">
+                <li><a href="/">Home</a></li>
+                <li><a href="/category/{{ product.category.id }}/{{ product.category.slug }}">{{ product.category.title }}</a></li>
+                <li class="active">{{ product.title }}</li>
+            </ul>
+        </div>
+    </div>
+    <!-- /BREADCRUMB -->
     <!-- section -->
 	<div class="section">
 		<!-- container -->
@@ -21,31 +32,23 @@
 					<div class="col-md-6">
 						<div id="product-main-view">
 							<div class="product-view">
-								<img src="{% static '' %}img/main-product01.jpg" alt="">
+								<img src="{{ product.image.url }}" alt="" style="height: 600px">
 							</div>
+                            {% for rs in images %}
 							<div class="product-view">
-								<img src="{% static '' %}img/main-product02.jpg" alt="">
+								<img src="{{ rs.image.url }}" alt="" style="height: 600px">
 							</div>
-							<div class="product-view">
-								<img src="{% static '' %}img/main-product03.jpg" alt="">
-							</div>
-							<div class="product-view">
-								<img src="{% static '' %}img/main-product04.jpg" alt="">
-							</div>
+							{% endfor %}
 						</div>
 						<div id="product-view">
 							<div class="product-view">
-								<img src="{% static '' %}img/thumb-product01.jpg" alt="">
+								<img src="{{ product.image.url }}" alt="" style="height: 160px">
 							</div>
+							{% for rs in images %}
 							<div class="product-view">
-								<img src="{% static '' %}img/thumb-product02.jpg" alt="">
+								<img src="{{ rs.image.url }}" alt="" style="height: 160px">
 							</div>
-							<div class="product-view">
-								<img src="{% static '' %}img/thumb-product03.jpg" alt="">
-							</div>
-							<div class="product-view">
-								<img src="{% static '' %}img/thumb-product04.jpg" alt="">
-							</div>
+                            {% endfor %}
 						</div>
 					</div>
 					<div class="col-md-6">
@@ -54,8 +57,8 @@
 								<span>New</span>
 								<span class="sale">-20%</span>
 							</div>
-							<h2 class="product-name">Product Name Goes Here</h2>
-							<h3 class="product-price">$32.50 <del class="product-old-price">$45.00</del></h3>
+							<h2 class="product-name">{{ product.title }}</h2>
+							<h3 class="product-price">${{ product.price }} <del class="product-old-price">$45.00</del></h3>
 							<div>
 								<div class="product-rating">
 									<i class="fa fa-star"></i>
@@ -68,8 +71,7 @@
 							</div>
 							<p><strong>Availability:</strong> In Stock</p>
 							<p><strong>Brand:</strong> E-SHOP</p>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-								dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+							<p>{{ product.description }}</p>
 							<div class="product-options">
 								<ul class="size-option">
 									<li><span class="text-uppercase">Size:</span></li>
@@ -104,13 +106,11 @@
 						<div class="product-tab">
 							<ul class="tab-nav">
 								<li class="active"><a data-toggle="tab" href="#tab1">Description</a></li>
-								<li><a data-toggle="tab" href="#tab1">Details</a></li>
 								<li><a data-toggle="tab" href="#tab2">Reviews (3)</a></li>
 							</ul>
 							<div class="tab-content">
 								<div id="tab1" class="tab-pane fade in active">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-										irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+									<p>{{ product.detail | safe }}</p>
 								</div>
 								<div id="tab2" class="tab-pane fade in">
 
@@ -238,16 +238,17 @@
 					</div>
 				</div>
 				<!-- section title -->
-
+                {% for rs in picked %}
 				<!-- Product Single -->
 				<div class="col-md-3 col-sm-6 col-xs-6">
 					<div class="product product-single">
 						<div class="product-thumb">
-							<button class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>
-							<img src="{% static '' %}img/product04.jpg" alt="">
+							<button onclick="location.href='{% url 'product_detail' rs.id rs.slug %}'"
+                                    class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>
+							<img src="{{ rs.image.url }}" alt="" style="height: 200px">
 						</div>
 						<div class="product-body">
-							<h3 class="product-price">$32.50</h3>
+							<h3 class="product-price">${{ rs.price }}</h3>
 							<div class="product-rating">
 								<i class="fa fa-star"></i>
 								<i class="fa fa-star"></i>
@@ -255,7 +256,7 @@
 								<i class="fa fa-star"></i>
 								<i class="fa fa-star-o empty"></i>
 							</div>
-							<h2 class="product-name"><a href="#">Product Name Goes Here</a></h2>
+							<h2 class="product-name"><a href="#">{{ rs.title }}</a></h2>
 							<div class="product-btns">
 								<button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
 								<button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
@@ -265,97 +266,7 @@
 					</div>
 				</div>
 				<!-- /Product Single -->
-
-				<!-- Product Single -->
-				<div class="col-md-3 col-sm-6 col-xs-6">
-					<div class="product product-single">
-						<div class="product-thumb">
-							<div class="product-label">
-								<span>New</span>
-							</div>
-							<button class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>
-							<img src="{% static '' %}img/product03.jpg" alt="">
-						</div>
-						<div class="product-body">
-							<h3 class="product-price">$32.50</h3>
-							<div class="product-rating">
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star-o empty"></i>
-							</div>
-							<h2 class="product-name"><a href="#">Product Name Goes Here</a></h2>
-							<div class="product-btns">
-								<button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
-								<button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
-								<button class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- /Product Single -->
-
-				<!-- Product Single -->
-				<div class="col-md-3 col-sm-6 col-xs-6">
-					<div class="product product-single">
-						<div class="product-thumb">
-							<div class="product-label">
-								<span class="sale">-20%</span>
-							</div>
-							<button class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>
-							<img src="{% static '' %}img/product02.jpg" alt="">
-						</div>
-						<div class="product-body">
-							<h3 class="product-price">$32.50 <del class="product-old-price">$45.00</del></h3>
-							<div class="product-rating">
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star-o empty"></i>
-							</div>
-							<h2 class="product-name"><a href="#">Product Name Goes Here</a></h2>
-							<div class="product-btns">
-								<button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
-								<button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
-								<button class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- /Product Single -->
-
-				<!-- Product Single -->
-				<div class="col-md-3 col-sm-6 col-xs-6">
-					<div class="product product-single">
-						<div class="product-thumb">
-							<div class="product-label">
-								<span>New</span>
-								<span class="sale">-20%</span>
-							</div>
-							<button class="main-btn quick-view"><i class="fa fa-search-plus"></i> Quick view</button>
-							<img src="{% static '' %}img/product01.jpg" alt="">
-						</div>
-						<div class="product-body">
-							<h3 class="product-price">$32.50 <del class="product-old-price">$45.00</del></h3>
-							<div class="product-rating">
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star"></i>
-								<i class="fa fa-star-o empty"></i>
-							</div>
-							<h2 class="product-name"><a href="#">Product Name Goes Here</a></h2>
-							<div class="product-btns">
-								<button class="main-btn icon-btn"><i class="fa fa-heart"></i></button>
-								<button class="main-btn icon-btn"><i class="fa fa-exchange"></i></button>
-								<button class="primary-btn add-to-cart"><i class="fa fa-shopping-cart"></i> Add to Cart</button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<!-- /Product Single -->
+                {% endfor %}
 			</div>
 			<!-- /row -->
 		</div>

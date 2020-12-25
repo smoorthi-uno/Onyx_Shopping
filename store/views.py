@@ -4,7 +4,7 @@ from django.http import JsonResponse, HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 
-from .forms import CreateUserForm
+from .forms import CreateUserForm, SearchForm
 from .models import *
 from .utils import cartData, guestOrder
 import json
@@ -53,10 +53,11 @@ def product_detail(request, id, slug):
     product = Product.objects.get(pk=id)
 
     images = Images.objects.filter(product_id=id)
+    products_picked = Product.objects.all().order_by('?')[:4]  # Random 4 products
     # comments = Comment.objects.filter(product_id=id,status='True')
     context = {'product': product, 'category': category,
                'images': images,  # 'comments': comments,
-               }
+               'picked': products_picked,}
     # if product.variant != "None":  # Product have variants
     #     if request.method == 'POST':  # if we select color
     #         variant_id = request.POST.get('variantid')
@@ -176,7 +177,7 @@ def registerPage(request):
                 to_addresses.append(email)
                 send_mail('Onyx Women & Kids Clothing', 'Dear ' + username + ',' +
                           '\n\nThank you for creating an Onyx account.To begin enjoying all the great features available to you, simply sign in with your username and password - anytime, anywhere.' +
-                          '\n\nUsername: '+ username + '\n\nOnyx Women & Kids Clothing',
+                          '\n\nUsername: ' + username + '\n\nOnyx Women & Kids Clothing',
                           email, to_addresses)
 
                 return redirect('login')
@@ -245,7 +246,7 @@ def home(request):
     category = Category.objects.all()
     products_latest = Product.objects.all().order_by('-id')[:4]  # last 4 products
     products_slider = Product.objects.all().order_by('id')[:4]  # first 4 products
-    products_picked = Product.objects.all().order_by('?')[:4]  # Random selected 4 products
+    products_picked = Product.objects.all().order_by('?')[:4]  # Random 4 products
     page = "home"
     context = {'setting': setting,
                'page': page,
@@ -284,3 +285,40 @@ def aboutus(request):
     category = Category.objects.all()
     context = {'setting': setting, 'category': category}
     return render(request, 'store/aboutus.html', context)
+
+
+def search(request):
+    if request.method == 'POST':  # check post
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            query = form.cleaned_data['query']  # get form input data
+            catid = form.cleaned_data['catid']
+            if catid == 0:
+                products = Product.objects.filter(
+                    title__icontains=query)  # SELECT * FROM product WHERE title LIKE '%query%'
+            else:
+                products = Product.objects.filter(title__icontains=query, category_id=catid)
+
+            category = Category.objects.all()
+            context = {'products': products, 'query': query,
+                       'category': category}
+            return render(request, 'store/search_products.html', context)
+
+    return HttpResponseRedirect('/')
+
+
+def search_auto(request):
+    if request.is_ajax():
+        q = request.GET.get('term', '')
+        products = Product.objects.filter(title__icontains=q)
+
+        results = []
+        for rs in products:
+            product_json = {}
+            product_json = rs.title #+ " > " + rs.category.title
+            results.append(product_json)
+        data = json.dumps(results)
+    else:
+        data = 'fail'
+    mimetype = 'application/json'
+    return HttpResponse(data, mimetype)

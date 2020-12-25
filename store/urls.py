@@ -20,6 +20,9 @@ urlpatterns = [
     path('category/<int:id>/<slug:slug>', views.category_products, name='category_products'),
     path('product/<int:id>/<slug:slug>/', views.product_detail, name='product_detail'),
 
+    path('search/', views.search, name='search'),
+    path('search_auto/', views.search_auto, name='search_auto'),
+
     path('register/', views.registerPage, name='register'),
     path('login/', views.loginPage, name='login'),
     path('logout/', views.logoutUser, name='logout'),

@@ -61,7 +61,7 @@ class Product(models.Model):
     title = models.CharField(max_length=150, null=True, blank=True)
     keywords = models.CharField(max_length=255, null=True, blank=True)
     description = models.TextField(max_length=255, null=True, blank=True)
-    image = models.ImageField(null=True, blank=True)
+    image = models.ImageField()
     price = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     amount = models.IntegerField(default=0)
     digital = models.BooleanField(default=False, null=True, blank=True)

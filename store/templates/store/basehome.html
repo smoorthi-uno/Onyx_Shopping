@@ -30,6 +30,12 @@
     <!-- Custom stylesheet -->
     <link type="text/css" rel="stylesheet" href="{% static '' %}css/style.css" />
 
+    <!-- jQuery !-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"> </script>
+    <!-- jQuery UI !-->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
 </head>
 <body>
 {% block header %}{% include 'store/header.html' %}{% endblock %}
@@ -39,7 +45,6 @@
 {% block footer %}{% include 'store/footer.html' %}{% endblock %}
 
 <!-- jQuery Plugins -->
-<script src="{% static '' %}js/jquery.min.js"></script>
 <script src="{% static '' %}js/bootstrap.min.js"></script>
 <script src="{% static '' %}js/slick.min.js"></script>
 <script src="{% static '' %}js/nouislider.min.js"></script>
